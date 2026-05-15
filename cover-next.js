@@ -254,10 +254,11 @@
 		const data = allData[index];
 		if (!data) return;
 
-		// หา title cell (td ที่มีลิงก์ details.php)
-		const td = row.querySelector('td[align="left"]') || row.querySelector('a[href*="details.php"]')?.closest('td');
-		const detailUrl = row.querySelector('a[href*="details.php"]')?.href;
-		if (!td) return;
+		// หา title cell (td ที่มีลิงก์ details.php และกว้าง 100%)
+		const detailLink = row.querySelector('a[href*="details.php"]');
+		const td = detailLink?.closest('td[width="100%"]');
+		const detailUrl = detailLink?.href;
+		if (!td || !detailUrl) return;
 
 		// 1. จัดการคอลัมน์รูป
 		const posterTd = td.previousElementSibling;
