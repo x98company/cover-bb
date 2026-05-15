@@ -140,8 +140,8 @@
 			if (rawData) {
 				try {
 					const item = JSON.parse(rawData);
-					// อัปเดต download URL จาก list row ถ้า cache เก่าไม่มี
-					if (!item.download && existingDl) item.download = existingDl.href;
+					// อัปเดต download URL จาก list row เสมอเพื่อป้องกัน token หมดอายุ
+					if (existingDl) item.download = existingDl.href;
 					return item;
 				} catch (e) {}
 			}
@@ -202,20 +202,31 @@
 			method: "GET",
 			url: referer,
 			onload: function(detailsResponse) {
-				// Auto Thanks
+				let freshUrl = url;
 				try {
 					const doc = new DOMParser().parseFromString(detailsResponse.responseText, 'text/html');
+					
+					// Get fresh download link to avoid Download Guard
+					const dlLink = doc.querySelector('a[href*="downloadnew.php"], a[href*="download.php"]');
+					if (dlLink) {
+						freshUrl = new URL(dlLink.getAttribute('href'), referer).href;
+					}
+
+					// Auto Thanks
 					const thanksImg = doc.querySelector('img[title="กดขอบคุณที่นี่"]');
 					if (thanksImg && thanksImg.parentElement?.tagName === 'A') {
-						GM_xmlhttpRequest({ method: "GET", url: thanksImg.parentElement.href });
+						const thanksUrl = new URL(thanksImg.parentElement.getAttribute('href'), referer).href;
+						GM_xmlhttpRequest({ method: "GET", url: thanksUrl });
 						console.log("Auto-thanks sent!");
 					}
-				} catch (e) {}
+				} catch (e) {
+					console.error("Error parsing details page:", e);
+				}
 
-				console.log("Starting download...");
+				console.log("Starting download with fresh URL:", freshUrl);
 				GM_xmlhttpRequest({
 					method: "GET",
-					url: url,
+					url: freshUrl,
 					headers: { "Referer": referer, "User-Agent": navigator.userAgent },
 					responseType: "blob",
 					onload: function(response) {
