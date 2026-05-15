@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Cover Next (Bearbit)
+// @name         Cover BB (Bearbit)
 // @namespace    http://tampermonkey.net/
 // @version      2.25.9
 // @description  tools that will help you see new items and make it easier for you to use the website to load bittorrent.
@@ -33,7 +33,7 @@
 // @match        https://bearbit.org/details.php*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      file:///C:/Users/lPae/Desktop/VideCode/bearbit/cover-next.js
+// @require      file:///C:/Users/lPae/Desktop/VideCode/bearbit/cover-bb.js
 // @connect      img.in.th
 // @connect      bpicc.cc
 // @connect      imgtrue.com
