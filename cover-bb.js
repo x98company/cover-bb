@@ -212,12 +212,12 @@
 						freshUrl = new URL(dlLink.getAttribute('href'), referer).href;
 					}
 
-					// Auto Thanks
-					const thanksImg = doc.querySelector('img[title="กดขอบคุณที่นี่"]');
+					// Auto Thanks - Looking for "กดขอบคุณที่นี่" or image in "pic/thanks/"
+					const thanksImg = doc.querySelector('img[title="กดขอบคุณที่นี่"], img[src*="pic/thanks/"]');
 					if (thanksImg && thanksImg.parentElement?.tagName === 'A') {
 						const thanksUrl = new URL(thanksImg.parentElement.getAttribute('href'), referer).href;
 						GM_xmlhttpRequest({ method: "GET", url: thanksUrl });
-						console.log("Auto-thanks sent!");
+						console.log("Auto-thanks sent to:", thanksUrl);
 					}
 				} catch (e) {
 					console.error("Error parsing details page:", e);
