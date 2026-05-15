@@ -124,9 +124,9 @@
 		};
 		cleanupOldCache();
 
-		// หา rows ทั้งหมดที่มีลิงก์ details.php ไม่จำกัดแค่ td[width="900"]
-		const torrentRows = Array.from(document.querySelectorAll('table[width="100%"] tr'))
-			.filter(tr => tr.querySelector('a[href*="details.php"]'));
+		// หา rows ทั้งหมดที่มีลิงก์ details.php โดยเลือกเฉพาะ tr ในสุด
+		const allDetailLinks = Array.from(document.querySelectorAll('table[width="100%"] a[href*="details.php"]'));
+		const torrentRows = Array.from(new Set(allDetailLinks.map(a => a.closest('tr')))).filter(Boolean);
 		const detailLinks = torrentRows.map(tr => tr.querySelector('a[href*="details.php"]'));
 		const results = await Promise.all(detailLinks.map(async (link, index) => {
 			const detailUrl = link.href;
@@ -254,9 +254,9 @@
 		const data = allData[index];
 		if (!data) return;
 
-		// หา title cell (td ที่มีลิงก์ details.php และกว้าง 100%)
+		// หา title cell (td ที่มีลิงก์ details.php)
 		const detailLink = row.querySelector('a[href*="details.php"]');
-		const td = detailLink?.closest('td[width="100%"]');
+		const td = detailLink?.closest('td');
 		const detailUrl = detailLink?.href;
 		if (!td || !detailUrl) return;
 
