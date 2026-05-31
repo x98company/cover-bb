@@ -12,13 +12,25 @@
 
 	// --- ส่วนที่ 0: ระบบตั้งค่า (Settings) ---
 	const getSettings = () => {
-		const defaultSettings = { thumbWidth: 60, thumbHeight: 85 };
+		const defaultSettings = { thumbWidth: 60, thumbHeight: 85, hoverZoom: 1.8 };
 		const saved = localStorage.getItem('bb_cover_settings');
-		return saved ? JSON.parse(saved) : defaultSettings;
+		if (!saved) return defaultSettings;
+
+		try {
+			const parsed = JSON.parse(saved);
+			return {
+				thumbWidth: Number.isFinite(parsed.thumbWidth) ? parsed.thumbWidth : defaultSettings.thumbWidth,
+				thumbHeight: Number.isFinite(parsed.thumbHeight) ? parsed.thumbHeight : defaultSettings.thumbHeight,
+				hoverZoom: Number.isFinite(parsed.hoverZoom) ? parsed.hoverZoom : defaultSettings.hoverZoom
+			};
+		} catch (e) {
+			localStorage.removeItem('bb_cover_settings');
+			return defaultSettings;
+		}
 	};
 
-	const saveSettings = (width, height) => {
-		localStorage.setItem('bb_cover_settings', JSON.stringify({ thumbWidth: width, thumbHeight: height }));
+	const saveSettings = (width, height, hoverZoom) => {
+		localStorage.setItem('bb_cover_settings', JSON.stringify({ thumbWidth: width, thumbHeight: height, hoverZoom }));
 		location.reload();
 	};
 
@@ -43,7 +55,9 @@
 			if (w === null) return;
 			const h = prompt("ระบุความสูง Thumbnail (px):", settings.thumbHeight);
 			if (h === null) return;
-			saveSettings(parseInt(w) || 60, parseInt(h) || 85);
+			const z = prompt("ระบุขนาดซูมตอน Hover (เช่น 1.8):", settings.hoverZoom);
+			if (z === null) return;
+			saveSettings(parseInt(w) || 60, parseInt(h) || 85, parseFloat(z) || 1.8);
 		};
 		document.body.appendChild(btn);
 	};
@@ -295,7 +309,7 @@
 				link.style.background = 'white';
 			};
 
-			link.onmouseover = () => { link.style.transform = 'scale(1.8)'; link.style.zIndex = '1000'; link.style.boxShadow = '0 20px 25px rgba(0,0,0,0.3)'; };
+			link.onmouseover = () => { link.style.transform = `scale(${settings.hoverZoom})`; link.style.zIndex = '1000'; link.style.boxShadow = '0 20px 25px rgba(0,0,0,0.3)'; };
 			link.onmouseout  = () => { link.style.transform = 'scale(1)';   link.style.zIndex = '1';    link.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)'; };
 			link.onclick = (e) => { e.preventDefault(); modalImg.src = data.screenshot; modal.style.display = 'flex'; };
 

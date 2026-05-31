@@ -33,7 +33,7 @@
 // @match        https://bearbit.org/details.php*
 // @grant        GM_addStyle
 // @grant        GM_xmlhttpRequest
-// @require      https://raw.githubusercontent.com/x98company/cover-bb/main/cover-bb.js
+// @require      file:///C:/Users/lPae/Desktop/VideCode/bearbit/cover-bb.js
 // @connect      img.in.th
 // @connect      bpicc.cc
 // @connect      imgtrue.com
