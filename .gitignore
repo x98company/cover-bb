@@ -3,3 +3,4 @@ node_modules/
 .gemini/
 .vscode/
 *.log
+cover-bb.source.js
