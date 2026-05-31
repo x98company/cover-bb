@@ -38,6 +38,51 @@
 
 	const setupSettingsUI = () => {
 		if (document.getElementById('bb-settings-btn')) return;
+		const closeSettingsPanel = () => {
+			document.getElementById('bb-settings-panel')?.remove();
+		};
+		const showSettingsPanel = () => {
+			closeSettingsPanel();
+			const panel = document.createElement('div');
+			panel.id = 'bb-settings-panel';
+			panel.style.cssText = `
+				position: fixed; bottom: 72px; left: 20px; z-index: 999999;
+				width: 260px; background: white; color: #0f172a; border-radius: 10px;
+				box-shadow: 0 20px 40px rgba(15,23,42,0.22); border: 1px solid #e2e8f0;
+				font-family: Arial, sans-serif; font-size: 13px; padding: 14px;
+			`;
+			panel.innerHTML = `
+				<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+					<strong style="font-size:14px;">Bearbit Settings</strong>
+					<button type="button" id="bb-settings-close" style="border:0;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:#64748b;">x</button>
+				</div>
+				<label style="display:block;margin-bottom:10px;">
+					<span style="display:block;margin-bottom:4px;color:#475569;">Thumbnail width (px)</span>
+					<input id="bb-setting-width" type="number" min="20" step="1" value="${settings.thumbWidth}" style="width:100%;box-sizing:border-box;padding:7px 8px;border:1px solid #cbd5e1;border-radius:6px;">
+				</label>
+				<label style="display:block;margin-bottom:10px;">
+					<span style="display:block;margin-bottom:4px;color:#475569;">Thumbnail height (px)</span>
+					<input id="bb-setting-height" type="number" min="20" step="1" value="${settings.thumbHeight}" style="width:100%;box-sizing:border-box;padding:7px 8px;border:1px solid #cbd5e1;border-radius:6px;">
+				</label>
+				<label style="display:block;margin-bottom:14px;">
+					<span style="display:block;margin-bottom:4px;color:#475569;">Hover zoom</span>
+					<input id="bb-setting-zoom" type="number" min="1" step="0.1" value="${settings.hoverZoom}" style="width:100%;box-sizing:border-box;padding:7px 8px;border:1px solid #cbd5e1;border-radius:6px;">
+				</label>
+				<div style="display:flex;justify-content:flex-end;gap:8px;">
+					<button type="button" id="bb-settings-cancel" style="padding:7px 12px;border:1px solid #cbd5e1;background:white;border-radius:6px;cursor:pointer;">Cancel</button>
+					<button type="button" id="bb-settings-save" style="padding:7px 12px;border:0;background:#2563eb;color:white;border-radius:6px;cursor:pointer;font-weight:bold;">Save</button>
+				</div>
+			`;
+			document.body.appendChild(panel);
+			document.getElementById('bb-settings-close').onclick = closeSettingsPanel;
+			document.getElementById('bb-settings-cancel').onclick = closeSettingsPanel;
+			document.getElementById('bb-settings-save').onclick = () => {
+				const width = parseInt(document.getElementById('bb-setting-width').value, 10) || 60;
+				const height = parseInt(document.getElementById('bb-setting-height').value, 10) || 85;
+				const hoverZoom = parseFloat(document.getElementById('bb-setting-zoom').value) || 1.8;
+				saveSettings(width, height, hoverZoom);
+			};
+		};
 		const btn = document.createElement('div');
 		btn.id = 'bb-settings-btn';
 		btn.innerHTML = '⚙️';
@@ -59,6 +104,7 @@
 			if (z === null) return;
 			saveSettings(parseInt(w) || 60, parseInt(h) || 85, parseFloat(z) || 1.8);
 		};
+		btn.onclick = showSettingsPanel;
 		document.body.appendChild(btn);
 	};
 	setupSettingsUI();
