@@ -22,21 +22,18 @@ Current version: `2.28.0`
 
 - `cover-bb.user.js` - Tampermonkey metadata wrapper.
 - `cover-bb.js` - encrypted public loader used by Tampermonkey.
-- `cover-bb.source.js` - local readable source only. This file is ignored and should not be committed.
-- `cover-next-master/` - local reference material only, not part of this project output.
 
-## Install Locally
+## Install
 
 1. Install Tampermonkey.
 2. Add or update `cover-bb.user.js` in Tampermonkey.
-3. Confirm the `@require` path points to the local encrypted loader:
+3. Confirm the `@require` path points to the encrypted loader:
 
 ```js
-// @require      file:///C:/Users/lPae/Desktop/VideCode/bearbit/cover-bb.js
+// @require      https://raw.githubusercontent.com/x98company/cover-bb/refs/heads/main/cover-bb.js
 ```
 
-4. Enable local file access for Tampermonkey if the browser requires it.
-5. Open a supported Bearbit page and use the floating gear button.
+4. Open a supported Bearbit page and use the floating gear button.
 
 ## Settings
 
@@ -91,43 +88,25 @@ This uses the same referer-aware download function as the single `Download Torre
 
 ## Encryption Workflow
 
-Readable source stays local in `cover-bb.source.js`.
-
-Public output is `cover-bb.js`, generated as an XOR + Base64 self-decrypting loader with key:
-
-```text
-bearbit-cover-bb-2026
-```
+Public output is `cover-bb.js`, generated from a private local source file.
 
 Important:
-- Keep `cover-bb.source.js` local only.
-- Commit/push only `cover-bb.js` and `cover-bb.user.js` for public updates.
+- Do not publish private local source files or local environment paths.
+- Commit/push only `cover-bb.js`, `cover-bb.user.js`, and public documentation for public updates.
 - The loader uses direct `eval(code);` so Tampermonkey APIs such as `GM_xmlhttpRequest` remain available in the userscript sandbox.
 
 ## Regenerate Encrypted Loader
 
-Use Node.js to regenerate `cover-bb.js` from `cover-bb.source.js` with the existing encryption helper logic.
+Use the private local build helper to regenerate `cover-bb.js` from the private source file.
 
 After regenerating, verify:
 
 ```powershell
-node --check cover-bb.source.js
 node --check cover-bb.js
 node --check cover-bb.user.js
 ```
 
-Also decode `cover-bb.js` and compare it byte-for-byte with `cover-bb.source.js` before committing.
-
-## Git Remotes
-
-Current remotes:
-
-```text
-origin  https://github.com/x98company/cover-bb.git
-gitea   http://192.168.1.31:8418/codex_org/cover-bb.git
-```
-
-The local branch `main` tracks `gitea/main`.
+Also decode `cover-bb.js` and compare it with the private source before committing.
 
 ## Troubleshooting
 
@@ -149,8 +128,7 @@ not indirect eval.
 
 Downloads do not start:
 
-- Confirm Tampermonkey has local file access.
-- Confirm the `@require` file path exists.
+- Confirm the `@require` URL is reachable.
 - Try clearing the script cache from the settings popup.
 
 Images do not load:
