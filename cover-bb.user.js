@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      2.33.0
 // @description  tools that will help you see new items and make it easier for you to use the website to load bittorrent.
-// @author       NEKO
+// @author       X98
 // @icon         https://i.imgur.com/qTvfJSr.png
 // @match        https://www.bearbit.org
 // @match        https://www.bearbit.org/index.php*
