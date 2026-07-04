@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cover BB (Bearbit)
 // @namespace    http://tampermonkey.net/
-// @version      2.32.0
+// @version      2.33.0
 // @description  tools that will help you see new items and make it easier for you to use the website to load bittorrent.
 // @author       NEKO
 // @icon         https://i.imgur.com/qTvfJSr.png
