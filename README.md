@@ -2,7 +2,7 @@
 
 Cover BB is a Tampermonkey userscript helper for Bearbit. It improves torrent list browsing, cover previews, download handling, and page cleanup while keeping the public script file encrypted.
 
-Current version: `2.33.0`
+Current version: `2.34.0`
 
 ## What It Does
 
